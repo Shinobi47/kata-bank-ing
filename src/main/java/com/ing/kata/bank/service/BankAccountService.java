@@ -43,16 +43,48 @@ public class BankAccountService {
 		
 		Assert.notNull(accountId, "Cannot perform transaction with null accountId");
 		Assert.notNull(amount, "Cannot perform transaction with null amount");
+		Assert.isTrue(isPositive(amount), "Cannot perform transaction with negative amount");
 		
 		AccountDto account = bankAccountRepository.findById(accountId).orElseThrow(() -> new TechnicalException("No account available with the specified accountId"));
 		
 		if(DEPOSIT.equals(transactionType)) {
 			depositAmount(amount, account);
 		}
-
+		else if(WITHDRAW.equals(transactionType)) {
+			withdrawAmount(amount, account);
+		}
 	}
 	
+	private void withdrawAmount(BigDecimal amount, AccountDto account) {
+		BigDecimal currentBalance = account.getCurrentBalance();
+		
+		if(amountToWithdrawDoesntCauseOverdraft(amount, currentBalance)) {
+			log.info("Withdrawing the amount : {} from the account : {}", amount, account.toString());
+			BigDecimal newBalance = currentBalance.subtract(amount);
+			account.setCurrentBalance(newBalance);
+			
+			StatementDto statement = StatementDto.builder()
+				.amount(amount)
+				.date(LocalDateTime.now())
+				.transactionType(WITHDRAW)
+				.balance(newBalance).build();
+			bankAccountRepository.save(account);
+			statementRepository.save(statement);
+		}
+		
+		else {
+			throw new TechnicalException("Withdraw not allowed because you are poor");
+		}
+	}
 
+	private boolean isPositive(BigDecimal amount) {
+		return amount.compareTo(BigDecimal.ZERO) > 0;
+	}
+
+	private boolean amountToWithdrawDoesntCauseOverdraft(BigDecimal amount, BigDecimal currentBalance) {
+		return currentBalance.compareTo(amount) == 1 || currentBalance.compareTo(amount) == 0;
+	}
+	
 	private void depositAmount(BigDecimal amount, AccountDto account) {
 		
 		if(amount.compareTo(MINIMAL_DEPOSIT) == 1) {
