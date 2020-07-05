@@ -1,17 +1,16 @@
 package com.ing.kata.bank.service;
 
+import static com.ing.kata.bank.constant.Constants.MINIMAL_DEPOSIT;
 import static com.ing.kata.bank.enums.TransactionType.DEPOSIT;
 import static com.ing.kata.bank.enums.TransactionType.WITHDRAW;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import static com.ing.kata.bank.constant.Constants.MINIMAL_DEPOSIT;
 import com.ing.kata.bank.dto.AccountDto;
 import com.ing.kata.bank.dto.StatementDto;
 import com.ing.kata.bank.enums.TransactionType;
@@ -30,13 +29,17 @@ public class BankAccountService {
 	private BankAccountRepository bankAccountRepository;
 	private StatementRepository statementRepository;
 	
-	public AccountDto fetchAccount(Long customerId) {
-		return new AccountDto();
+	public AccountDto fetchAccount(Long accountId) {
+		Assert.notNull(accountId, "Cannot find account with null accountId");
+		
+		return bankAccountRepository.findById(accountId).orElseThrow(() -> new TechnicalException("No account with the specified id"));
 		
 	}
 	
 	public List<StatementDto> fetchTransactionsHistory(Long accountId){
-		return new ArrayList<StatementDto>();
+		Assert.notNull(accountId, "Cannot find transactions history with null accountId");
+
+		return statementRepository.findByAccount_id(accountId);
 	}
 	
 	public void executeTransaction(TransactionType transactionType, Long accountId, BigDecimal amount) {
@@ -54,6 +57,7 @@ public class BankAccountService {
 			withdrawAmount(amount, account);
 		}
 	}
+
 	
 	private void withdrawAmount(BigDecimal amount, AccountDto account) {
 		BigDecimal currentBalance = account.getCurrentBalance();

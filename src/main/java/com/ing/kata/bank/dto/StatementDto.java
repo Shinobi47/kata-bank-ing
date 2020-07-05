@@ -18,4 +18,5 @@ public class StatementDto {
 	private BigDecimal amount;
 	private BigDecimal balance;
 	private TransactionType transactionType;
+	private AccountDto account;
 }
