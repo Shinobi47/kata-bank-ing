@@ -15,10 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ing.kata.bank.dto.AccountDto;
-import com.ing.kata.bank.dto.StatementDto;
+import com.ing.kata.bank.entity.AccountEntity;
+import com.ing.kata.bank.entity.StatementEntity;
 import com.ing.kata.bank.exception.TechnicalException;
 import com.ing.kata.bank.service.BankAccountService;
+import com.ing.kata.bank.utils.DataMapper;
 
 import kata.ing.bank.repository.BankAccountRepository;
 import kata.ing.bank.repository.StatementRepository;
@@ -32,11 +33,13 @@ public class DisplayOperationsTest {
 	@Mock
 	private StatementRepository statementRepository;
 	
+	private DataMapper dataMapper = new DataMapper();
+	
 	private BankAccountService bankAccountService;
 	
 	@BeforeEach
 	public void init() {
-		bankAccountService = new BankAccountService(bankAccountRepository, statementRepository);
+		bankAccountService = new BankAccountService(bankAccountRepository, statementRepository, dataMapper);
 	}
 	
 	@Test
@@ -58,7 +61,7 @@ public class DisplayOperationsTest {
 		//Arrange
 		Long accountId = 1L;
 		
-		AccountDto accountFromRepo = AccountDto.builder().id(accountId).build();
+		AccountEntity accountFromRepo = AccountEntity.builder().id(accountId).build();
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 
 		//Act
@@ -103,7 +106,7 @@ public class DisplayOperationsTest {
 		//Arrange
 		Long accountId = 1L;
 		
-		when(statementRepository.findByAccount_id(accountId)).thenReturn(Arrays.asList(StatementDto.builder().build()));
+		when(statementRepository.findByAccount_id(accountId)).thenReturn(Arrays.asList(StatementEntity.builder().build()));
 
 		//Act
 		bankAccountService.fetchTransactionsHistory(accountId);

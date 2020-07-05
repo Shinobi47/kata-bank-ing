@@ -1,19 +1,13 @@
 package kata.ing.bank.repository;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
-import com.ing.kata.bank.dto.StatementDto;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public class StatementRepository {
+import com.ing.kata.bank.entity.StatementEntity;
+
+public interface StatementRepository extends JpaRepository<StatementEntity, Long> {
 	
-	public void save(StatementDto statement) {
-		//temp
-	}
-	
-	public List<StatementDto> findByAccount_id(Long id){
-		return Arrays.asList(StatementDto.builder().amount(new BigDecimal(10)).build());
-	}
+	public List<StatementEntity> findByAccount_id(Long id);
 
 }

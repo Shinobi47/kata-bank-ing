@@ -19,10 +19,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ing.kata.bank.constant.Constants;
-import com.ing.kata.bank.dto.AccountDto;
+import com.ing.kata.bank.entity.AccountEntity;
 import com.ing.kata.bank.enums.TransactionType;
 import com.ing.kata.bank.exception.TechnicalException;
 import com.ing.kata.bank.service.BankAccountService;
+import com.ing.kata.bank.utils.DataMapper;
 
 import kata.ing.bank.repository.BankAccountRepository;
 import kata.ing.bank.repository.StatementRepository;
@@ -39,9 +40,11 @@ class TransactionTests {
 	
 	private BankAccountService bankAccountService;
 	
+	private DataMapper dataMapper = new DataMapper();
+	
 	@BeforeEach
 	public void init() {
-		bankAccountService = new BankAccountService(bankAccountRepository, statementRepository);
+		bankAccountService = new BankAccountService(bankAccountRepository, statementRepository, dataMapper);
 	}
 	
 	@ParameterizedTest
@@ -123,7 +126,7 @@ class TransactionTests {
 	public void should_throw_exception_when_account_doest_exist(TransactionType transactionType) {
 		//Arrange
 		Long accountId = 1L;
-		AccountDto accountFromRepo = null;
+		AccountEntity accountFromRepo = null;
 		
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 		
@@ -148,7 +151,7 @@ class TransactionTests {
 		BigDecimal amountToWithdraw = new BigDecimal(10);
 		BigDecimal currentBalance = new BigDecimal(0);
 		
-		AccountDto accountFromRepo = AccountDto.builder().id(accountId).currentBalance(currentBalance).build();
+		AccountEntity accountFromRepo = AccountEntity.builder().id(accountId).currentBalance(currentBalance).build();
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 
 		//Act
@@ -171,7 +174,7 @@ class TransactionTests {
 		BigDecimal AmountToWithdraw = new BigDecimal(10);
 		BigDecimal currentBalance = new BigDecimal(100);
 		
-		AccountDto accountFromRepo = AccountDto.builder().id(accountId).currentBalance(currentBalance).build();
+		AccountEntity accountFromRepo = AccountEntity.builder().id(accountId).currentBalance(currentBalance).build();
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 		
 		//Act
@@ -191,7 +194,7 @@ class TransactionTests {
 		BigDecimal AmountToWithdraw = new BigDecimal(10);
 		BigDecimal currentBalance = new BigDecimal(10);
 		
-		AccountDto accountFromRepo = AccountDto.builder().id(accountId).currentBalance(currentBalance).build();
+		AccountEntity accountFromRepo = AccountEntity.builder().id(accountId).currentBalance(currentBalance).build();
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 		
 		//Act
@@ -211,7 +214,7 @@ class TransactionTests {
 		Long accountId = 1L;
 		BigDecimal amountLessThanMinimumAllowed = Constants.MINIMAL_DEPOSIT.subtract(new BigDecimal(0.001));
 		
-		AccountDto accountFromRepo = AccountDto.builder().id(accountId).currentBalance(new BigDecimal(10)).build();
+		AccountEntity accountFromRepo = AccountEntity.builder().id(accountId).currentBalance(new BigDecimal(10)).build();
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 		
 		//Act
@@ -232,7 +235,7 @@ class TransactionTests {
 		Long accountId = 1L;
 		BigDecimal AmountToDeposit = Constants.MINIMAL_DEPOSIT.add(new BigDecimal(10));
 		
-		AccountDto accountFromRepo = AccountDto.builder().id(accountId).currentBalance(new BigDecimal(10)).build();
+		AccountEntity accountFromRepo = AccountEntity.builder().id(accountId).currentBalance(new BigDecimal(10)).build();
 		when(bankAccountRepository.findById(accountId)).thenReturn(Optional.ofNullable(accountFromRepo));
 		
 		//Act
