@@ -30,7 +30,7 @@ The Kata contains a Business layer connected to an embedded inMemory database an
 To run the project locally, simply execute the maven goal "spring-boot:run" and make sure that your port 8087 is not used by anoher process or change it in the yml file.
 
 ### Features :
-For test purposed, we have fed the database with one account and one customer (details can be found in resource file).
+For test purposes, the database is filled with one account and one customer (details can be found in resource file).
 
 #### Deposit/Withdraw :
 Two transactions are possible : deposit and withdraw.
@@ -51,3 +51,4 @@ When a transaction is executed, a statement is generated and stored in order to 
 It is possible to get the transactions hisory for a given account as shown in the following test case :
 ![consult statements](https://i.imgur.com/QfID7zg.jpg)
 
+Further featured can be implemented and discussed.
