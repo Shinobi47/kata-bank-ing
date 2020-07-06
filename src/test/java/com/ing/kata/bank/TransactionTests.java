@@ -97,7 +97,7 @@ class TransactionTests {
 		bankAccountService.executeTransaction(transactionType, accountId, negativeAmount));
 		
 		//Assert
-		Assertions.assertTrue(exception.getMessage().contains("Cannot perform transaction with negative amount"));
+		Assertions.assertTrue(exception.getMessage().contains("Cannot perform transaction with non positive negative amount"));
 		verify(bankAccountRepository, never()).findById(accountId);
 		verify(bankAccountRepository, never()).save(any());
 		verify(statementRepository, never()).save(any());
@@ -115,7 +115,7 @@ class TransactionTests {
 		bankAccountService.executeTransaction(transactionType, accountId, zeroAmount));
 		
 		//Assert
-		Assertions.assertTrue(exception.getMessage().contains("Cannot perform transaction with negative amount"));
+		Assertions.assertTrue(exception.getMessage().contains("Cannot perform transaction with non positive negative amount"));
 		verify(bankAccountRepository, never()).findById(accountId);
 		verify(bankAccountRepository, never()).save(any());
 		verify(statementRepository, never()).save(any());

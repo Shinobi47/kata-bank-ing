@@ -3,6 +3,7 @@ package com.ing.kata.bank.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ing.kata.bank.enums.TransactionType;
 
 import lombok.AllArgsConstructor;
@@ -18,5 +19,7 @@ public class StatementDto {
 	private BigDecimal amount;
 	private BigDecimal balance;
 	private TransactionType transactionType;
+	
+	@JsonIgnore
 	private AccountDto account;
 }

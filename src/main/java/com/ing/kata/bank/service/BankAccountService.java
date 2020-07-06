@@ -34,6 +34,8 @@ public class BankAccountService {
 	private StatementRepository statementRepository;
 	private DataMapper dataMapper;
 	
+	
+	
 	public AccountDto fetchAccount(Long accountId) {
 		Assert.notNull(accountId, "Cannot find account with null accountId");
 		
@@ -57,7 +59,7 @@ public class BankAccountService {
 		
 		Assert.notNull(accountId, "Cannot perform transaction with null accountId");
 		Assert.notNull(amount, "Cannot perform transaction with null amount");
-		Assert.isTrue(isPositive(amount), "Cannot perform transaction with negative amount");
+		Assert.isTrue(isPositive(amount), "Cannot perform transaction with non positive negative amount");
 		
 		AccountEntity account = bankAccountRepository
 				.findById(accountId)

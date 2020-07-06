@@ -11,12 +11,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data @Builder
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-@Table(name = "MAILING_SPONSOR")
+@Table(name = "ACCOUNT")
 public class AccountEntity {
 
 	@Id
@@ -25,11 +27,18 @@ public class AccountEntity {
 	
 	@Column(name = "ACT_CUR_BLN")
 	private BigDecimal currentBalance;
-	
+		
 	@OneToOne
-	@JoinColumn(name = "ACT_CUS_ID")//, referencedColumnName = "id")
+	@JoinColumn(name = "ACT_CUS_ID")
 	private CustomerEntity customer;
 	
 	@OneToMany(mappedBy="account")
 	private List<StatementEntity> statements;
+
+	@Override
+	public String toString() {
+		return "AccountEntity [id=" + id + ", currentBalance=" + currentBalance + ", customer=" + customer + "]";
+	}
+	
+	
 }

@@ -17,10 +17,12 @@ import javax.persistence.Table;
 
 import com.ing.kata.bank.enums.TransactionType;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data @Builder
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
 @Table(name = "STATEMENTS")
 public class StatementEntity {
@@ -45,6 +47,6 @@ public class StatementEntity {
 	private TransactionType transactionType;
 	
 	@ManyToOne
-    @JoinColumn(name="OFR_SPR_ID")
+    @JoinColumn(name="STM_ACT_ID")
 	private AccountEntity account;
 }
