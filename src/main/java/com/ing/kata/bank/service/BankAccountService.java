@@ -59,7 +59,7 @@ public class BankAccountService {
 		
 		Assert.notNull(accountId, "Cannot perform transaction with null accountId");
 		Assert.notNull(amount, "Cannot perform transaction with null amount");
-		Assert.isTrue(isPositive(amount), "Cannot perform transaction with non positive negative amount");
+		Assert.isTrue(isPositive(amount), "Cannot perform transaction with non positive amount");
 		
 		AccountEntity account = bankAccountRepository
 				.findById(accountId)
